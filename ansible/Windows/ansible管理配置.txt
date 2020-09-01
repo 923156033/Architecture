@@ -1,0 +1,26 @@
+（1）. 对管理主机的要求
+
+目前,只要机器上安装了 Python 2.6 或 Python 2.7 (windows系统不可以做控制主机),都可以运行Ansible.
+
+主机的系统可以是 Red Hat, Debian, CentOS, OS X, BSD的各种版本,等等.
+
+（2）安装ansible
+yum install -y ansible
+
+（3）python安装相关模块
+easy_install pip
+pip install paramiko PyYAML Jinja2 httplib2 six pywinrm
+
+(4)配置hosts文件：
+[win]
+192.168.14.42
+
+[win:vars]
+ansible_ssh_user='admin'
+ansible_ssh_pass='123456..'
+ansible_ssh_port=5985
+ansible_connection='winrm'
+ansible_winrm_server_cert_validation=ignore
+
+
+至此，服务端配置完毕
