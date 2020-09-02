@@ -24,3 +24,62 @@ ansible_winrm_server_cert_validation=ignore
 
 
 至此，服务端配置完毕
+
+解决获取win的网卡乱码的问题
+sed -i "s#tdout_buffer.append(stdout)#tdout_buffer.append(stdout.decode('gbk').encode('utf-8'))#g" /usr/lib/python2.7/site-packages/winrm/protocol.py
+sed -i "s#stderr_buffer.append(stderr)#stderr_buffer.append(stderr.decode('gbk').encode('utf-8'))#g" /usr/lib/python2.7/site-packages/winrm/protocol.py
+
+测试报错
+
+[root@squid ~]# ansible windows -m win_ping
+10.241.0.4 | FAILED! => {
+    "msg": "winrm or requests is not installed: No module named winrm"
+}
+
+解决方法
+
+安装pip
+#下载安装包
+[root@squid ~]# wget http://download.baiyongjie.com/python/pip/pip-8.1.0.tar.gz
+[root@squid ~]# wget http://download.baiyongjie.com/python/pip/setuptools-33.1.1.zip
+
+#解压安装包
+[root@squid ~]# unzip setuptools-33.1.1.zip
+[root@squid ~]# tar zxvf pip-8.1.0.tar.gz
+
+#安装setuptools
+[root@squid ~]# cd setuptools-33.1.1
+[root@squid ~]# python2.7  setup.py  install
+
+#安装pip
+[root@squid ~]# cd ../
+[root@squid ~]# cd pip-8.1.0
+[root@squid ~]# python2.7 setup.py install
+[root@squid ~]# pip2.7 install --upgrade pip
+
+[root@squid ~]# pip2.7  --version
+pip 18.0 from /usr/lib/python2.7/site-packages/pip (python 2.7)
+
+安装pywinrm模块
+[root@squid ~]# pip2 install "pywinrm>=0.2.2"
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Collecting pywinrm>=0.2.2
+  Using cached https://pypi.tuna.tsinghua.edu.cn/packages/0d/12/13a3117bbd2230043aa32dcfa2198c33269665eaa1a8fa26174ce49b338f/pywinrm-0.3.0-py2.py3-none-any.whl
+Requirement already satisfied: six in /usr/lib/python2.7/site-packages (from pywinrm>=0.2.2) (1.9.0)
+Requirement already satisfied: requests-ntlm>=0.3.0 in /usr/lib/python2.7/site-packages (from pywinrm>=0.2.2) (1.1.0)
+Requirement already satisfied: requests>=2.9.1 in /usr/lib/python2.7/site-packages (from pywinrm>=0.2.2) (2.19.1)
+Requirement already satisfied: xmltodict in /usr/lib/python2.7/site-packages (from pywinrm>=0.2.2) (0.11.0)
+Requirement already satisfied: cryptography>=1.3 in /usr/lib64/python2.7/site-packages (from requests-ntlm>=0.3.0->pywinrm>=0.2.2) (1.7.2)
+Requirement already satisfied: ntlm-auth>=1.0.2 in /usr/lib/python2.7/site-packages (from requests-ntlm>=0.3.0->pywinrm>=0.2.2) (1.2.0)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/lib/python2.7/site-packages (from requests>=2.9.1->pywinrm>=0.2.2) (2018.8.13)
+Requirement already satisfied: chardet<3.1.0,>=3.0.2 in /usr/lib/python2.7/site-packages (from requests>=2.9.1->pywinrm>=0.2.2) (3.0.4)
+Requirement already satisfied: urllib3<1.24,>=1.21.1 in /usr/lib/python2.7/site-packages (from requests>=2.9.1->pywinrm>=0.2.2) (1.23)
+Requirement already satisfied: idna<2.8,>=2.5 in /usr/lib/python2.7/site-packages (from requests>=2.9.1->pywinrm>=0.2.2) (2.7)
+Requirement already satisfied: pyasn1>=0.1.8 in /usr/lib/python2.7/site-packages (from cryptography>=1.3->requests-ntlm>=0.3.0->pywinrm>=0.2.2) (0.1.9)
+Requirement already satisfied: setuptools in /usr/lib/python2.7/site-packages/setuptools-33.1.1-py2.7.egg (from cryptography>=1.3->requests-ntlm>=0.3.0->pywinrm>=0.2.2) (33.1.1)
+Requirement already satisfied: enum34 in /usr/lib/python2.7/site-packages (from cryptography>=1.3->requests-ntlm>=0.3.0->pywinrm>=0.2.2) (1.0.4)
+Requirement already satisfied: ipaddress in /usr/lib/python2.7/site-packages (from cryptography>=1.3->requests-ntlm>=0.3.0->pywinrm>=0.2.2) (1.0.16)
+Requirement already satisfied: cffi>=1.4.1 in /usr/lib64/python2.7/site-packages (from cryptography>=1.3->requests-ntlm>=0.3.0->pywinrm>=0.2.2) (1.6.0)
+Requirement already satisfied: pycparser in /usr/lib/python2.7/site-packages (from cffi>=1.4.1->cryptography>=1.3->requests-ntlm>=0.3.0->pywinrm>=0.2.2) (2.14)
+Installing collected packages: pywinrm
+Successfully installed pywinrm-0.3.0

@@ -1,0 +1,49 @@
+WINDOWS常用模块
+ 
+ping模块
+ansible windows -m win_ping
+ 
+指定配置文件获取win网卡信息
+ansible -i win_hosts windows -m raw -a "ipconfig"
+ 
+使用默认的配置文件获取网卡信息
+ansible windows -m raw -a "ipconfig"
+ 
+拷贝文件到远程Windows主机
+ansible windows -m win_copy -a 'src=/etc/passwd dest=F:\file\passwd'
+ 
+ansible windows -m win_copy -a "src=/usr/local/src/PayChannels20.35.zip dest=D:\Tomcat8630\webapps\PayChannels20.35.zip"
+ 
+ansible windows -m win_copy -a "src=/usr/local/src/SupplierPay.zip dest=D:\SupplierPay.zip
+ 
+将.zip解压到远程Windows主机，远程主机上必须存在需要解压的源文件
+ansible windows -m win_unzip -a"creates=no src=D:\Tomcat8620\webapps\PayChannels-8630.zip dest=D:\Tomcat8620\webapps"
+ 
+解压到D盘
+ansible windows -m win_unzip -a"creates=no src=D:\SupplierPay.zip dest=D:"
+ 
+重启远程windows主机的服务
+ansible windows -m win_service -a "name=Tomcat8630 state=restarted"
+ 
+重启node.js(.bat命令)
+ansible windows -m win_command -a "chdir=D:\SupplierPay .\http_restart.bat"
+ 
+执行win_command模块命令
+启动redis
+ansible windows -m win_command -a "chdir=D:\Redis server-start.bat "
+ 
+删除文件或者目录
+ansible windows -m win_file -a "dest=D:\Tomcat8630\log\ state=absent"
+ansible windows -m win_file -a "dest=D:\Tomcat8630\logs\ state=absent"
+ 
+创建用户
+ansible windows -m win_user -a "name=aa passwd=123456"
+ 
+创建一个名叫user1的管理员用户，要求能够远程访问
+ansible windows -m win_user -a "name=user1 password=123 groups='Administrators,Remote Desktop Users'"
+ 
+重启的第一种方式
+ansible windows -m win_shell -a "shutdown -r -t 1"
+ 
+重启的第二种方式
+ansible windows -m win_reboot

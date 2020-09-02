@@ -1,0 +1,5 @@
+ansible windows -m win_ping   #win_ping —Windows系统下的ping模块，常用来测试主机是否存活
+
+ansible windows -m raw -a "shutdown -s -t 0"    #关机，执行cmd命令 （需要关闭360安全卫士）
+
+ansible windows -m raw -a "shutdown -r -t 0"    #关机，执行cmd命令 （需要关闭360安全卫士）
