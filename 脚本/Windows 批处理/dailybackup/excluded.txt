@@ -1,0 +1,21 @@
+﻿$RECYCLE.BIN
+*RECYCLE.BIN
+*RECYCLE.BIN*
+*\*\Logs
+*\Logs
+*.log
+Program Files
+Program Files*
+System Volume Information
+*\备份
+*\backup
+备份
+backup
+bak*
+dailybackup
+CrashDump
+\CrashDump\*
+pagefile.sys
+Ansible
+Service_Manager
+下架
