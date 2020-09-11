@@ -1,4 +1,6 @@
 WINDOWS常用模块
+
+模块详解：https://docs.ansible.com/ansible/latest/modules/list_of_windows_modules.html
  
 ping模块
 ansible windows -m win_ping
