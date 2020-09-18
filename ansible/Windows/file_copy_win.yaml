@@ -1,0 +1,9 @@
+---
+- name: windows module example
+  hosts: win
+  tasks:
+  - name: Copy a single file
+    win_copy: 
+      src: /etc/passwd 
+      dest: E:\file\passwd
+      backup: yes
