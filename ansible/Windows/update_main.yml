@@ -1,0 +1,12 @@
+- hosts: win
+  gather_facts: false
+  tasks:
+  - name: stop main
+    win_shell: taskkill /f /t /im main.exe 
+  - name: copy main
+    win_copy:
+      src: /etc/ansible/tmp/main.exe
+      dest: C:\Service_Manager\main.exe
+      backup: yes    
+  - name: start  main
+    win_shell: schtasks /run  /tn "start mian"
